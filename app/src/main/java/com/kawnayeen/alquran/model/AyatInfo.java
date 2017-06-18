@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 /**
  * Created by kawnayeen on 6/18/17.
  */
-@Entity
+@Entity(tableName = AyatInfo.TABLE_NAME)
 public class AyatInfo {
     @PrimaryKey
     private String uniqueId;
@@ -15,6 +15,8 @@ public class AyatInfo {
     private String arabicText;
     private String englishText;
     private String bengaliText;
+
+    public static final String TABLE_NAME = "ayat_info";
 
     public AyatInfo(String surahNumber, String ayatNumber) {
         this.surahNumber = surahNumber;
@@ -48,5 +50,29 @@ public class AyatInfo {
 
     public String getBengaliText() {
         return bengaliText;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
+
+    public void setSurahNumber(String surahNumber) {
+        this.surahNumber = surahNumber;
+    }
+
+    public void setAyatNumber(String ayatNumber) {
+        this.ayatNumber = ayatNumber;
+    }
+
+    public void setArabicText(String arabicText) {
+        this.arabicText = arabicText;
+    }
+
+    public void setEnglishText(String englishText) {
+        this.englishText = englishText;
+    }
+
+    public void setBengaliText(String bengaliText) {
+        this.bengaliText = bengaliText;
     }
 }
