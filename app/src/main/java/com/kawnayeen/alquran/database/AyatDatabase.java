@@ -1,7 +1,9 @@
-package com.kawnayeen.alquran.model;
+package com.kawnayeen.alquran.database;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
+
+import com.kawnayeen.alquran.model.AyatInfo;
 
 /**
  * Created by kawnayeen on 6/18/17.
