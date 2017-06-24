@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kawnayeen.alquran.networking.WebServices;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -19,11 +21,13 @@ public class WebServicesModule {
     private static final String BASE_URL = "https://muhhsinin.github.io/";
 
     @Provides
+    @Singleton
     public WebServices getWebServices(Retrofit retrofit) {
         return retrofit.create(WebServices.class);
     }
 
     @Provides
+    @Singleton
     public Retrofit retrofit(OkHttpClient okHttpClient, Gson gson) {
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -33,6 +37,7 @@ public class WebServicesModule {
     }
 
     @Provides
+    @Singleton
     public Gson gson() {
         return new GsonBuilder().create();
     }

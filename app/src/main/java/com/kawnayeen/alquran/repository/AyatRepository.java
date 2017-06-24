@@ -1,16 +1,18 @@
 package com.kawnayeen.alquran.repository;
 
-import com.kawnayeen.alquran.networking.RestClient;
+import com.kawnayeen.alquran.AlQuranApp;
 import com.kawnayeen.alquran.networking.WebServices;
+
+import javax.inject.Inject;
 
 /**
  * Created by kawnayeen on 6/19/17.
  */
-
 public class AyatRepository {
-    private WebServices webServices = null;
+    @Inject
+    public WebServices webServices;
 
     public AyatRepository() {
-        webServices = RestClient.getWebServices();
+        AlQuranApp.getAlQuranAppComponent().injectAyatRepository(this);
     }
 }

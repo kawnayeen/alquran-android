@@ -1,5 +1,7 @@
 package com.kawnayeen.alquran.factory.modules;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -11,6 +13,7 @@ import okhttp3.OkHttpClient;
 @Module
 public class NetworkModule {
     @Provides
+    @Singleton
     public OkHttpClient okHttpClient() {
         return new OkHttpClient.Builder().build();
     }
