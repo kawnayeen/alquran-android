@@ -20,6 +20,9 @@ public interface AyatInfoDao {
     @Query("SELECT * FROM " + AyatInfo.TABLE_NAME + " WHERE uniqueId = :uniqueId")
     LiveData<AyatInfo> load(String uniqueId);
 
+    @Query("SELECT COUNT(*) FROM " + AyatInfo.TABLE_NAME + " WHERE uniqueId = :uniqueId")
+    int isAyatExists(String uniqueId);
+
     @Query("SELECT COUNT(*) FROM " + AyatInfo.TABLE_NAME)
     int count();
 }

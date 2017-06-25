@@ -1,14 +1,14 @@
 package com.kawnayeen.alquran.repository;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 
+import com.kawnayeen.alquran.async.AppExecutor;
 import com.kawnayeen.alquran.database.AyatInfoDao;
 import com.kawnayeen.alquran.model.AyatInfo;
 import com.kawnayeen.alquran.networking.WebServices;
 
-import retrofit2.Call;
-import retrofit2.Callback;
+import java.io.IOException;
+
 import retrofit2.Response;
 
 /**
@@ -17,26 +17,37 @@ import retrofit2.Response;
 public class AyatRepository {
     private WebServices webServices;
     private AyatInfoDao ayatInfoDao;
+    private AppExecutor executor;
 
-    public AyatRepository(WebServices webServices, AyatInfoDao ayatInfoDao) {
+    public AyatRepository(WebServices webServices, AyatInfoDao ayatInfoDao, AppExecutor executor) {
         this.webServices = webServices;
         this.ayatInfoDao = ayatInfoDao;
+        this.executor = executor;
     }
 
     public LiveData<AyatInfo> getAyat(String surahNumber, String ayatNumber) {
-        final MutableLiveData<AyatInfo> data = new MutableLiveData<>();
-        webServices.getAyatInfo(surahNumber, surahNumber + ayatNumber + ".json").enqueue(new Callback<AyatInfo>() {
-            @Override
-            public void onResponse(Call<AyatInfo> call, Response<AyatInfo> response) {
-                if (response.isSuccessful()) {
-                    data.setValue(response.body());
+        fetchAyatIfRequired(surahNumber, ayatNumber);
+        return ayatInfoDao.load(getUniqueId(surahNumber, ayatNumber));
+    }
+
+    private void fetchAyatIfRequired(String surahNumber, String ayatNumber) {
+        executor.execute(() -> {
+            String uniqueId = getUniqueId(surahNumber, ayatNumber);
+            boolean isExists = ayatInfoDao.isAyatExists(uniqueId) == 1;
+            if (!isExists) {
+                try {
+                    Response<AyatInfo> response = webServices.getAyatInfo(surahNumber, uniqueId + ".json").execute();
+                    if (response.isSuccessful()) {
+                        ayatInfoDao.save(response.body());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-
-            @Override
-            public void onFailure(Call<AyatInfo> call, Throwable t) {
-            }
         });
-        return data;
+    }
+
+    private String getUniqueId(String surahNumber, String ayatNumber) {
+        return surahNumber + ayatNumber;
     }
 }

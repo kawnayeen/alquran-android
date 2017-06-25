@@ -32,12 +32,15 @@ public class AyatDatabaseTest {
     @Test
     public void testInsertAndCount() {
         assertThat(ayatDatabase.ayatInfoDao().count(), Matchers.is(0));
+        assertThat(ayatDatabase.ayatInfoDao().isAyatExists("001001"), Matchers.is(0));
         AyatInfo ayatInfo = new AyatInfo("001", "001");
         ayatInfo.setArabicText("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ");
         ayatInfo.setEnglishText("In the Name of Allah, the Most Beneficent, the Most Merciful.");
         ayatInfo.setBengaliText("শুরু করছি আল্লাহর নামে যিনি পরম করুণাময়, অতি দয়ালু।");
         ayatDatabase.ayatInfoDao().save(ayatInfo);
         assertThat(ayatDatabase.ayatInfoDao().count(), Matchers.is(1));
+        assertThat(ayatDatabase.ayatInfoDao().isAyatExists("001001"), Matchers.is(1));
+        assertThat(ayatDatabase.ayatInfoDao().isAyatExists("001002"), Matchers.is(0));
     }
 
     @After
