@@ -8,6 +8,7 @@ import com.kawnayeen.alquran.model.AyatInfo;
 import com.kawnayeen.alquran.networking.WebServices;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
 
 import retrofit2.Response;
 
@@ -31,14 +32,16 @@ public class AyatRepository {
     }
 
     private void fetchAyatIfRequired(String surahNumber, String ayatNumber) {
-        executor.execute(() -> {
+        Executors.newSingleThreadExecutor().execute(() -> {
             String uniqueId = getUniqueId(surahNumber, ayatNumber);
             boolean isExists = ayatInfoDao.isAyatExists(uniqueId) == 1;
             if (!isExists) {
                 try {
                     Response<AyatInfo> response = webServices.getAyatInfo(surahNumber, uniqueId + ".json").execute();
                     if (response.isSuccessful()) {
-                        ayatInfoDao.save(response.body());
+                        AyatInfo ayatInfo = response.body();
+                        ayatInfo.generateUniqueId();
+                        ayatInfoDao.save(ayatInfo);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

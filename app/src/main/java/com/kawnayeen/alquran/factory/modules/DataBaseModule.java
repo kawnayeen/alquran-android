@@ -21,7 +21,7 @@ public class DataBaseModule {
     @Provides
     @Singleton
     public AyatDatabase getAyatDatabase(Context context) {
-        return Room.inMemoryDatabaseBuilder(context, AyatDatabase.class).build();
+        return Room.databaseBuilder(context, AyatDatabase.class, "alquran").build();
     }
 
     @Provides
