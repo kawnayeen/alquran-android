@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.kawnayeen.alquran.factory.AlQuranAppComponent;
 import com.kawnayeen.alquran.factory.DaggerAlQuranAppComponent;
+import com.kawnayeen.alquran.factory.modules.ContextModule;
 
 /**
  * Developed by : kawnayeen
@@ -12,13 +13,13 @@ import com.kawnayeen.alquran.factory.DaggerAlQuranAppComponent;
 public class AlQuranApp extends Application {
     private static AlQuranAppComponent alQuranAppComponent;
 
+    public static AlQuranAppComponent getAlQuranAppComponent() {
+        return alQuranAppComponent;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-        alQuranAppComponent = DaggerAlQuranAppComponent.builder().build();
-    }
-
-    public static AlQuranAppComponent getAlQuranAppComponent() {
-        return alQuranAppComponent;
+        alQuranAppComponent = DaggerAlQuranAppComponent.builder().contextModule(new ContextModule(this)).build();
     }
 }
